@@ -1,14 +1,19 @@
 import skidl
-import skircuits
+from skircuits.programmable.max10 import max10
 
-def pupa_form_factor():
+@skidl.subcircuit
+def pupa_form_factor(port):
     pass
 
-def pupa_circuit():
-    fpga = skidl.SubCircuit(skircuits.programmable.max10)
+@skidl.subcircuit
+def pupa_circuit(port):
+    fpga = max10('10m02sce144')
+    fpgacct = skidl.subcircuit(fpga.circuit)
+    fpgacct(port)
 
 if __name__ == '__main__':
-    form_factor = skidl.SubCircuit(pupa_form_factor)
-    circuit = skidl.SubCircuit(pupa_circuit)
+    port = skidl.Net()
+    pupa_circuit(port)
+    circuit = skidl.subcircuit(pupa_circuit)
     skidl.ERC()
     skidl.generate_netlist()
